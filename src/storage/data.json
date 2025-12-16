@@ -1,0 +1,20 @@
+[
+    {
+        "nombre": "pablin",
+        "email": "pablo@user.com",
+        "password": "$2y$12$gFP7tfnY9W3uo8r60Uq\/a.jKMT0gGYqD3I3\/ofSMhIv4mW3s\/kOpG",
+        "rol": "user"
+    },
+    {
+        "nombre": "pablo",
+        "email": "pablo@admin.com",
+        "password": "$2y$12$mtI0I2bYMbcZ6.w5Yp8g5Otler9Ky0SBdSuIrxPsK\/FYrVnwfcH2e",
+        "rol": "admin"
+    },
+    {
+        "nombre": "Antonio",
+        "email": "antonio@gmail.com",
+        "password": "$2y$12$bBu87KgAUXAERzJo8yulxeJvDOEp4xlW685BFY2pPkja84k6UqpMC",
+        "rol": "user"
+    }
+]

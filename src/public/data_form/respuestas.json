@@ -1,0 +1,57 @@
+[
+    {
+        "nombre": "Pablo Garrido Rubio",
+        "clase": "daw2",
+        "email": "garridorubiopablo@gmail.com",
+        "edad": 23,
+        "fecha_nacimiento": "275760-03-21",
+        "preferenciaPositivaInput": "cxsfvdasf",
+        "motivoPositivo": "dsafadf",
+        "color_favorito": "#ff0000",
+        "rol": "backend",
+        "lenguaje": "javascript",
+        "temas": [
+            "ia",
+            "ux"
+        ],
+        "git": 6,
+        "liderado": "lideradoNo",
+        "comunicacion": "asincrona",
+        "frecuencia_reuniones": "diaria",
+        "trabajo_equipo": "equipo",
+        "conflictos": "conflictosNo",
+        "gestion_tiempo": "baja",
+        "estres": 3,
+        "entorno": "silencio",
+        "bienestar": "bienestarSi",
+        "hora_inicio": "03:34",
+        "comentarios": "dasfcdsc"
+    },
+    {
+        "nombre": "Antonio",
+        "clase": "daw2",
+        "email": "antonio@gmail.com",
+        "edad": 21,
+        "fecha_nacimiento": "2004-12-24",
+        "preferenciaPositivaInput": "Manolo",
+        "motivoPositivo": "porque me gusta",
+        "color_favorito": "#ff00d0",
+        "rol": "fullstack",
+        "lenguaje": "javascript",
+        "temas": [
+            "seguridad"
+        ],
+        "git": 8,
+        "liderado": "lideradoSi",
+        "comunicacion": "asincrona",
+        "frecuencia_reuniones": "diaria",
+        "trabajo_equipo": "equipo",
+        "conflictos": "conflictosSi",
+        "gestion_tiempo": "media",
+        "estres": 3,
+        "entorno": "ruido_blanco",
+        "bienestar": "bienestarSi",
+        "hora_inicio": "11:00",
+        "comentarios": "Quiero croissant"
+    }
+]

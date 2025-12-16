@@ -1,0 +1,247 @@
+/* ===== Tipografía y Reseteo ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #f4f7fa;
+    color: #333;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ===== Header ===== */
+.encabezado-aplicacion {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    color: #fff;
+    padding: 2rem 1rem 3rem 1rem;
+    text-align: center;
+    position: relative;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.encabezado-aplicacion__titulo {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.encabezado-aplicacion__descripcion {
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Botón Logout */
+.encabezado-aplicacion form {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.encabezado-aplicacion button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.encabezado-aplicacion button:hover {
+    background-color: #b91c1c;
+}
+
+/* ===== Botón Primario ===== */
+.boton-primario {
+    background-color: #10b981;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.boton-primario:hover {
+    background-color: #059669;
+}
+
+/* ===== Zona Principal ===== */
+.zona-principal {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* ===== Mensajes ===== */
+.mensajes-estado {
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.mensajes-estado.ok {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.mensajes-estado.error {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* ===== Formularios ===== */
+.bloque-formulario,
+.bloque-listado {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.formulario-alta-usuario .form-row {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.form-input,
+select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.form-input:focus,
+select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.form-actions {
+    margin-top: 1rem;
+}
+
+.formulario-alta-usuario button {
+    background-color: #3b82f6; /* azul */
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.formulario-alta-usuario button:hover {
+    background-color: #2563eb;
+}
+
+/* Indicador cargando */
+.indicador-cargando {
+    margin-left: 1rem;
+    font-style: italic;
+    color: #555;
+}
+
+/* ===== Tabla ===== */
+.tabla-contenedor {
+    overflow-x: auto;
+}
+
+.tabla-usuarios {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.tabla-usuarios th,
+.tabla-usuarios td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-usuarios th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+}
+
+.tabla-usuarios tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* ===== Botones de la tabla ===== */
+.tabla-usuarios button {
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    color: white;
+    margin-right: 0.3rem;
+}
+
+/* Botón Eliminar */
+.tabla-usuarios button.btn-eliminar {
+    background-color: #ef4444;
+}
+.tabla-usuarios button.btn-eliminar:hover {
+    background-color: #b91c1c;
+}
+
+/* Botón Editar */
+.tabla-usuarios button.btn-editar {
+    background-color: #3b82f6;
+}
+.tabla-usuarios button.btn-editar:hover {
+    background-color: #2563eb;
+}
+
+/* ===== Footer ===== */
+.pie-aplicacion {
+    text-align: center;
+    margin: 3rem 0;
+    color: #555;
+}
+
+.pie-aplicacion a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.pie-aplicacion a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .encabezado-aplicacion__titulo {
+        font-size: 1.5rem;
+    }
+
+    .formulario-alta-usuario .form-row {
+        margin-bottom: 0.8rem;
+    }
+}

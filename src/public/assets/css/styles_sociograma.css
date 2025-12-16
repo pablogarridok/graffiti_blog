@@ -1,0 +1,264 @@
+/* ===== Tipografía y Reseteo ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #f4f7fa;
+    color: #333;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* ===== Título del Sociograma ===== */
+.sociograma-titulo {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ===== Botón Primario ===== */
+.boton-primario {
+    background-color: #10b981;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.boton-primario:hover {
+    background-color: #059669;
+}
+
+/* ===== Contenedor formulario ===== */
+form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+/* ===== Fieldset ===== */
+fieldset {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+legend {
+    font-weight: 600;
+    padding: 0 0.5rem;
+    color: #4f46e5;
+}
+
+/* ===== Labels e Inputs ===== */
+label {
+    display: block;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="color"],
+input[type="range"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* ===== Radio & Checkboxes ===== */
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.3rem;
+    cursor: pointer;
+}
+
+/* Input de color como rectángulo grande */
+.color-box {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    width: 80px;      /* ancho del rectángulo */
+    height: 40px;     /* alto del rectángulo */
+    padding: 0;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Chrome / Edge / Safari */
+.color-box::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-box::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+/* ===== Botón Submit ===== */
+input[type="submit"],
+button {
+    font-family: inherit;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Submit principal del formulario */
+input[type="submit"] {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: 0.2s;
+}
+
+input[type="submit"]:hover {
+    background-color: #4338ca;
+}
+
+/* ===== Botón Cerrar Sesión ===== */
+
+/* ===== Botón Cerrar Sesión ===== */
+.cerrar-sesion-container button {
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Hover */
+.cerrar-sesion-container button:hover {
+    background-color: #b91c1c;
+}
+
+/* Quitar recuadro en TODOS los estados */
+.cerrar-sesion-container button:focus,
+.cerrar-sesion-container button:focus-visible,
+.cerrar-sesion-container button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* ===== Mensajes de error ===== */
+span.error {
+    color: #ef4444;
+    font-size: 0.9rem;
+}
+
+/* ===== Textarea ===== */
+textarea {
+    resize: vertical;
+}
+
+/* ===== Radios en línea ===== */
+.radio-group {
+    display: flex;
+    gap: 1.5rem;      /* Separación entre opciones */
+    margin-top: 0.5rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    margin: 0;        /* Eliminamos el margen grande */
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 0px;
+}
+
+/* ===== Barra superior (título a la izquierda + logout a la derecha) ===== */
+/* ===== Barra superior con recuadro ===== */
+.top-bar {
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;        /* recuadro */
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Título alineado a la izquierda */
+.top-bar .sociograma-titulo {
+    margin: 0;
+    text-align: left;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4f46e5;
+}
+
+/* Botón cerrar sesión sin borde ni outline */
+.cerrar-sesion-container button {
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;           /* sin borde */
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Hover botón */
+.cerrar-sesion-container button:hover {
+    background-color: #b91c1c;
+}
+
+/* Quitar recuadro en TODOS los estados */
+.cerrar-sesion-container button:focus,
+.cerrar-sesion-container button:focus-visible,
+.cerrar-sesion-container button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
