@@ -7,12 +7,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $emailForm = trim($_POST["usuario"] ?? '');
     $passForm  = trim($_POST["password"] ?? '');
 
-    if (login($emailForm, $passForm)) {
-        // Redirige según rol
+    if ($emailForm === '' || $passForm === '') {
+        $error = '';
+    } elseif (login($emailForm, $passForm)) {
         if ($_SESSION['role'] === 'admin') {
-            header("Location: index_ajax.php"); // admin → AJAX
+            header("Location: index_ajax.php");
         } else {
-            header("Location: sociograma.php");   // user → parte 1
+            header("Location: blog_graffiti.php");
         }
         exit;
     } else {
@@ -46,6 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         <button type="submit">Entrar</button>
     </form>
+    <div class="register-link">
+        <p>¿No tienes cuenta?</p>
+    <a href="register.php">Crear cuenta</a>
+</div>
 </div>
 
 </body>

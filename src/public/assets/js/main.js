@@ -1,173 +1,220 @@
-const URL_API_SERVIDOR = '/public/api.php';
-const nodoCuerpoTablaUsuarios = document.getElementById('tbody');
-const nodoFilaEstadoVacio = document.getElementById('fila-estado-vacio');
-const formularioAltaUsuario = document.getElementById('formCreate');
-const nodoZonaMensajesEstado = document.getElementById('msg');
-const nodoBotonAgregarUsuario = document.getElementById('boton-agregar-usuario');
-const nodoIndicadorCargando = document.getElementById('indicador-cargando');
+// URL base de la API (ajustada a la nueva estructura)
+const API_URL = 'api.php';
 
-let usuariosGlobales = [];
+// Referencias a elementos del DOM
+const formCreate = document.getElementById('formCreate');
+const tbody = document.getElementById('tbody');
+const msgDiv = document.getElementById('msg');
+const filaVacia = document.getElementById('fila-estado-vacio');
+const indicadorCargando = document.getElementById('indicador-cargando');
+const botonAgregar = document.getElementById('boton-agregar-usuario');
 
-function mostrarMensajeDeEstado(tipoEstado, textoMensaje) {
-  nodoZonaMensajesEstado.className = tipoEstado;
-  nodoZonaMensajesEstado.textContent = textoMensaje;
-  if (tipoEstado !== '') setTimeout(() => {
-    nodoZonaMensajesEstado.className = '';
-    nodoZonaMensajesEstado.textContent = '';
-  }, 2000);
+// Variables para modo edición
+let modoEdicion = false;
+let indiceEditando = null;
+
+/**
+ * Muestra un mensaje temporal en la zona de mensajes
+ */
+function mostrarMensaje(texto, tipo = 'info') {
+    msgDiv.textContent = texto;
+    msgDiv.className = `mensajes-estado ${tipo}`;
+    msgDiv.style.display = 'block';
+
+    setTimeout(() => {
+        msgDiv.style.display = 'none';
+    }, 5000);
 }
 
-function activarEstadoCargando() {
-  if (nodoBotonAgregarUsuario) nodoBotonAgregarUsuario.disabled = true;
-  if (nodoIndicadorCargando) nodoIndicadorCargando.hidden = false;
-}
-function desactivarEstadoCargando() {
-  if (nodoBotonAgregarUsuario) nodoBotonAgregarUsuario.disabled = false;
-  if (nodoIndicadorCargando) nodoIndicadorCargando.hidden = true;
-}
-
-function convertirATextoSeguro(entrada) {
-  return String(entrada).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
-                        .replaceAll('>', '&gt;').replaceAll('"', '&quot;')
-                        .replaceAll("'", '&#39;');
+/**
+ * Muestra u oculta el indicador de carga
+ */
+function toggleCargando(mostrar) {
+    indicadorCargando.hidden = !mostrar;
+    botonAgregar.disabled = mostrar;
 }
 
-function renderizarTablaDeUsuarios(arrayUsuarios) {
-  nodoCuerpoTablaUsuarios.innerHTML = '';
-  if (Array.isArray(arrayUsuarios) && arrayUsuarios.length > 0) {
-    if (nodoFilaEstadoVacio) nodoFilaEstadoVacio.hidden = true;
-  } else {
-    if (nodoFilaEstadoVacio) nodoFilaEstadoVacio.hidden = false;
-    return;
-  }
-
-  arrayUsuarios.forEach((usuario, idx) => {
-    const nodoFila = document.createElement('tr');
-    nodoFila.innerHTML = `
-      <td>${idx + 1}</td>
-      <td>${convertirATextoSeguro(usuario?.nombre ?? '')}</td>
-      <td>${convertirATextoSeguro(usuario?.email ?? '')}</td>
-      <td>
-        <button type="button" data-posicion="${idx}" class="btn-eliminar">Eliminar</button>
-        <button type="button" data-posicion="${idx}" class="btn-editar">Editar</button>
-      </td>
-    `;
-    nodoCuerpoTablaUsuarios.appendChild(nodoFila);
-  });
-}
-
-async function obtenerYMostrarListadoDeUsuarios() {
-  try {
-    const respuestaHttp = await fetch(`${URL_API_SERVIDOR}?action=list`);
-    const cuerpoJson = await respuestaHttp.json();
-    if (!cuerpoJson.ok) throw new Error(cuerpoJson.error || 'No fue posible obtener el listado.');
-    usuariosGlobales = cuerpoJson.data;
-    renderizarTablaDeUsuarios(cuerpoJson.data);
-  } catch (error) {
-    mostrarMensajeDeEstado('error', error.message);
-  }
-}
-
-formularioAltaUsuario?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const datos = new FormData(formularioAltaUsuario);
-  const nuevoUsuario = {
-    nombre: String(datos.get('nombre') || '').trim(),
-    email: String(datos.get('email') || '').trim(),
-    password: String(datos.get('password') || '').trim(),
-    role: String(datos.get('role') || '').trim(),
-  };
-
-  if (!nuevoUsuario.nombre || !nuevoUsuario.email || !nuevoUsuario.role) {
-    mostrarMensajeDeEstado('error', 'Nombre, email y rol son obligatorios.');
-    return;
-  }
-
-  const editIndex = nodoBotonAgregarUsuario.dataset.editIndex;
-
-  if (editIndex !== undefined) {
-    // Actualizar usuario
+/**
+ * Carga y muestra la lista de usuarios
+ */
+async function cargarUsuarios() {
     try {
-      activarEstadoCargando();
-      const respuestaHttp = await fetch(`${URL_API_SERVIDOR}?action=update`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index: parseInt(editIndex, 10), ...nuevoUsuario }),
-      });
-      const cuerpoJson = await respuestaHttp.json();
-      if (!cuerpoJson.ok) throw new Error(cuerpoJson.error || 'No fue posible actualizar el usuario.');
-      renderizarTablaDeUsuarios(cuerpoJson.data);
-      formularioAltaUsuario.reset();
-      nodoBotonAgregarUsuario.textContent = 'Agregar usuario';
-      delete nodoBotonAgregarUsuario.dataset.editIndex;
-      mostrarMensajeDeEstado('ok', 'Usuario actualizado correctamente.');
+        toggleCargando(true);
+
+        const response = await fetch(`${API_URL}?action=list`);
+        const data = await response.json();
+
+        if (!data.ok) {
+            throw new Error(data.error || 'Error al cargar usuarios');
+        }
+
+        renderizarTabla(data.data);
+
     } catch (error) {
-      mostrarMensajeDeEstado('error', error.message);
-    } finally { desactivarEstadoCargando(); }
-    return;
-  }
-
-  // Crear usuario
-  if (!nuevoUsuario.password) {
-    mostrarMensajeDeEstado('error', 'La contraseña es obligatoria.');
-    return;
-  }
-
-  try {
-    activarEstadoCargando();
-    const respuestaHttp = await fetch(`${URL_API_SERVIDOR}?action=create`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(nuevoUsuario),
-    });
-    const cuerpoJson = await respuestaHttp.json();
-    if (!cuerpoJson.ok) throw new Error(cuerpoJson.error || 'No fue posible crear el usuario.');
-    renderizarTablaDeUsuarios(cuerpoJson.data);
-    formularioAltaUsuario.reset();
-    mostrarMensajeDeEstado('ok', 'Usuario agregado correctamente.');
-  } catch (error) {
-    mostrarMensajeDeEstado('error', error.message);
-  } finally { desactivarEstadoCargando(); }
-});
-
-nodoCuerpoTablaUsuarios?.addEventListener('click', async (e) => {
-  // Eliminar
-  const btnEliminar = e.target.closest('button.btn-eliminar');
-  if (btnEliminar) {
-    const idx = parseInt(btnEliminar.dataset.posicion, 10);
-    if (!Number.isInteger(idx)) return;
-    if (!window.confirm('¿Deseas eliminar este usuario?')) return;
-    try {
-      const respuestaHttp = await fetch(`${URL_API_SERVIDOR}?action=delete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index: idx }),
-      });
-      const cuerpoJson = await respuestaHttp.json();
-      if (!cuerpoJson.ok) throw new Error(cuerpoJson.error || 'No fue posible eliminar el usuario.');
-      renderizarTablaDeUsuarios(cuerpoJson.data);
-      mostrarMensajeDeEstado('ok', 'Usuario eliminado correctamente.');
-    } catch (error) {
-      mostrarMensajeDeEstado('error', error.message);
+        console.error(error);
+        mostrarMensaje('Error al cargar usuarios', 'error');
+    } finally {
+        toggleCargando(false);
     }
-    return;
-  }
+}
 
-  // Editar
-  const btnEditar = e.target.closest('button.btn-editar');
-  if (btnEditar) {
-    const idx = parseInt(btnEditar.dataset.posicion, 10);
-    if (!Number.isInteger(idx)) return;
-    const usuario = usuariosGlobales[idx];
-    formularioAltaUsuario['nombre'].value = usuario.nombre;
-    formularioAltaUsuario['email'].value = usuario.email;
-    formularioAltaUsuario['password'].value = '';
-    formularioAltaUsuario['role'].value = usuario.rol;
-    nodoBotonAgregarUsuario.textContent = 'Actualizar usuario';
-    nodoBotonAgregarUsuario.dataset.editIndex = idx;
-    formularioAltaUsuario['nombre'].focus();
-    return;
-  }
-});
+/**
+ * Renderiza la tabla de usuarios
+ */
+function renderizarTabla(usuarios) {
+    tbody.innerHTML = '';
 
-obtenerYMostrarListadoDeUsuarios();
+    if (!usuarios || usuarios.length === 0) {
+        filaVacia.hidden = false;
+        tbody.appendChild(filaVacia);
+        return;
+    }
+
+    filaVacia.hidden = true;
+
+    usuarios.forEach((usuario, index) => {
+        const tr = document.createElement('tr');
+
+        const tdNumero = document.createElement('td');
+        tdNumero.textContent = index + 1;
+
+        const tdNombre = document.createElement('td');
+        tdNombre.textContent = usuario.nombre || 'Sin nombre';
+
+        const tdEmail = document.createElement('td');
+        tdEmail.textContent = usuario.email || 'Sin email';
+
+        const tdAccion = document.createElement('td');
+
+        // Botón Editar
+        const btnEditar = document.createElement('button');
+        btnEditar.className = 'btn-editar';
+        btnEditar.textContent = 'Editar';
+        btnEditar.addEventListener('click', () => editarUsuario(index, usuario));
+
+        // Botón Eliminar
+        const btnEliminar = document.createElement('button');
+        btnEliminar.className = 'btn-eliminar';
+        btnEliminar.textContent = 'Eliminar';
+        btnEliminar.addEventListener('click', () => eliminarUsuario(index, usuario.nombre));
+
+        tdAccion.appendChild(btnEditar);
+        tdAccion.appendChild(btnEliminar);
+
+        tr.appendChild(tdNumero);
+        tr.appendChild(tdNombre);
+        tr.appendChild(tdEmail);
+        tr.appendChild(tdAccion);
+
+        tbody.appendChild(tr);
+    });
+}
+
+/**
+ * Crear o actualizar usuario
+ */
+async function crearUsuario(evento) {
+    evento.preventDefault();
+
+    const formData = new FormData(formCreate);
+    const datos = {
+        nombre: formData.get('nombre').trim(),
+        email: formData.get('email').trim(),
+        password: formData.get('password').trim(),
+        rol: formData.get('role')
+    };
+
+    if (!datos.nombre || !datos.email || (!modoEdicion && !datos.password)) {
+        mostrarMensaje('Completa todos los campos', 'error');
+        return;
+    }
+
+    try {
+        toggleCargando(true);
+
+        const accion = modoEdicion ? 'update' : 'create';
+
+        const response = await fetch(`${API_URL}?action=${accion}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...datos, index: indiceEditando })
+        });
+
+        const data = await response.json();
+
+        if (!data.ok) throw new Error(data.error);
+
+        mostrarMensaje(
+            modoEdicion ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente',
+            'ok'
+        );
+
+        resetFormulario();
+        await cargarUsuarios();
+
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje(error.message, 'error');
+    } finally {
+        toggleCargando(false);
+    }
+}
+
+/**
+ * Eliminar usuario
+ */
+async function eliminarUsuario(index, nombre) {
+    if (!confirm(`¿Eliminar a "${nombre}"?`)) return;
+
+    try {
+        toggleCargando(true);
+
+        const response = await fetch(`${API_URL}?action=delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ index })
+        });
+
+        const data = await response.json();
+
+        if (!data.ok) throw new Error(data.error);
+
+        mostrarMensaje('Usuario eliminado', 'ok');
+        await cargarUsuarios();
+
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje(error.message, 'error');
+    } finally {
+        toggleCargando(false);
+    }
+}
+
+/**
+ * Pone el formulario en modo edición
+ */
+function editarUsuario(index, usuario) {
+    modoEdicion = true;
+    indiceEditando = index;
+
+    formCreate.nombre.value = usuario.nombre;
+    formCreate.email.value = usuario.email;
+    formCreate.password.value = '';
+    formCreate.role.value = usuario.rol;
+
+    botonAgregar.textContent = 'Guardar cambios';
+}
+
+/**
+ * Resetea el formulario y sale del modo edición
+ */
+function resetFormulario() {
+    modoEdicion = false;
+    indiceEditando = null;
+    formCreate.reset();
+    botonAgregar.textContent = 'Agregar usuario';
+}
+
+// Eventos
+formCreate.addEventListener('submit', crearUsuario);
+document.addEventListener('DOMContentLoaded', cargarUsuarios);
